@@ -1,44 +1,46 @@
 //library of questions, choices and answers
 let lib = {
-    'True/False represents which data type?': [
-        ['string', false],
-        ['array', false],
-        ['integer', false],
-        ['boolean', true]
-    ],
-    'API stands for what?': [
-        ['Application Programming Interface', true],
-        ['Automatic Programming Interface', false],
-        ['Application Property Interface', false],
-        ['All Property Intercom', false],
-    ],
-    'What\'s an example of a loop': [
-        ['for', true],
-        ['while', true],
-        ['if', false],
-        ['because', false]
-    ],
-    'Why is linux the best operating sytem?': [
-        ['open source', true],
-        ['fast', true],
-        ['the guy who made it did it for fun vs to make money', true],
-        ['it\'s what you see in the movies', true]
-    ],
-    'What are the 3 main documents you use in web dev?': [
-        ['CSS, HTML, and Javascript', true],
-        ['files, folders, and links', false],
-        ['Files, HTML, and Javascript', false],
-        ['CSS, SASS, and HTML', false],
-    ]
+    'True/False represents which data type?': {
+        'string': false,
+        'array': false,
+        'integer': false,
+        'boolean': true
+    },
+    'API stands for what?': {
+        'Application Programming Interface': true,
+        'Automatic Programming Interface': false,
+        'Application Property Interface': false,
+        'All Property Intercom': false,
+    },
+    'What\'s an example of a loop': {
+        'for': true,
+        'while': true,
+        'for/in': true,
+        'do/while': true
+    },
+    'How do you convert a string to an int?': {
+        'paseInt': true,
+        'toString': true,
+        'toStr': true,
+        'Str': true
+    },
+    'How do you check if a value is a number?': {
+        'isNAN': true,
+        'isNumber': false,
+        'isNumberic': false,
+        'isNum': false
+    },
+    'What are the 3 main file types you use in web dev?': {
+        'CSS, HTML, and Javascript': true,
+        'files, folders, and links': false,
+        'Files, HTML, and Javascript': false,
+        'CSS, SASS, and HTML': false,
+    }
 }
 
-//array of questions to ask
-let questions = Object.keys(lib);
-// let questions = ['1','2','3','4'];
-
-
 //game variables
-let userScore;
+let secondsLeft;
+let questions = Object.keys(lib);
 
 //elements
 let timerEl = document.querySelector(".timer");
@@ -46,21 +48,6 @@ let playBtn = document.getElementById("playBtn");
 let questionEl = document.querySelector(".question");
 let choicesEl = document.querySelector('.choices');
 let buttonsEl = choicesEl.childNodes;
-
-
-//function to retreive random question not already asked & decrement question array
-//return: string if 
-function pickRandom() {
-    if (questions.length === 0) {
-        return null;
-    } else {
-        let randIndex = Math.floor(Math.random * questions.length);
-        let randQuestion = questions.pop();
-        // questions = questions.splice(randIndex, 1);
-        console.log("RandQ: ", questions, randIndex, randQuestion);
-        return randQuestion;
-    }
-}
 
 //funtion to shuffle array choices
 function shuffleArr(arr) {
@@ -77,55 +64,43 @@ function shuffleArr(arr) {
   return arr;
 }
 
-function navToHighScores() {
-    window.location.href = './high-scores.html';
-}
-
-//Picks question, displays question, creates buttons
+//Picks question, displays question, removes buttons if they exist, creates new buttons
 function askQuestion() {
-    let thisQ = pickRandom()
-    console.log("Inside askQuestion ", thisQ);
+    let thisQ = questions.pop()
     questionEl.textContent = thisQ;
-    let choices = lib[thisQ];
+    let choices = Object.keys(lib[thisQ]);
     
-    //delete all buttons existing
+    //Delete all buttons existing
     while (choicesEl.firstChild) {
         choicesEl.removeChild(choicesEl.firstChild);
     };
-    //for length of choices, create a button with choice id, set text value
+    //For length of choices, create a button with choice id, set text value, append to list
     for (let i = 0; i < choices.length; i++) {
-        //create element
         let btnEl = document.createElement("button");
         btnEl.setAttribute("class", "choice");
         btnEl.setAttribute("id", i);
-        btnEl.textContent = choices[i][0];
-        //append to parent
+        btnEl.textContent = choices[i];
         choicesEl.appendChild(btnEl);
-        console.log("creating button! with values: ", choices[i]);
     };
-    console.log("After creating buttons, ButtonsEl: ", buttonsEl);
 }
 
 function evaluateResponse(data) {
-    console.log("Evaluate Question function: ", data);
+    if (lib[questionEl.textContent][data]) {
+        return 5;
+    }
+    return -1;
 }
 
 //interval for checking if gameplay is valid.
 function setTimer() {
-    userScore = 0;
-    let secondsLeft = 5;
-    //shuffle questions
     questions = shuffleArr(questions);
-    //main loop
+    //game timer
     var timerInterval = setInterval(function() {
       secondsLeft--;
       timerEl.textContent = `Time left ${secondsLeft}`;
       if(!secondsLeft || !questions.length) {
-        playBtn.setAttribute("disabled", false);
+        endGame(secondsLeft);
         clearInterval(timerInterval);
-        userScore = secondsLeft; //might not need userScore variable
-        //redirect to high-scores page
-        // navToHighScores();
       }
   
     }, 1000);
@@ -133,16 +108,25 @@ function setTimer() {
 
   //Main function for game play
   function playGame() {
+      secondsLeft = 5;
       playBtn.setAttribute("disabled", true);
       setTimer();
       askQuestion()
   }
 
+  function endGame(score) {
+    playBtn.setAttribute("disabled", false);
+    userScore = score;
+    // window.location.href = './high-scores.html';
+  }
+
 choicesEl.addEventListener("click", function(event) {
     event.preventDefault();
     if(event.target.matches("button")) {
-        evaluateResponse(event.target);
-        askQuestion();
+        console.log(event.target.innerText)
+        secondsLeft += evaluateResponse(event.target.innerText);
+        if (questions.length) {
+            askQuestion();
+        }
     }
-    }
-    );
+});
