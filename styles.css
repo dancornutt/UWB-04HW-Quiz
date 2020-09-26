@@ -1,3 +1,20 @@
+.choice{
+    position: relative;
+    left: 220px;
+    display: block;
+    max-width: 400px;
+    border-radius: 10px;
+    border-color: white;
+    border-width: 4px;
+    font-size: 20px;
+    color: white;
+    background-color: rgb(80, 0, 80); 
+}
+
+.question{
+    font-weight: bold;
+}
+
 section{
     text-align: center;
     font-size: xx-large;

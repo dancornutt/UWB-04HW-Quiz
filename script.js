@@ -39,7 +39,7 @@ let lib = {
 }
 
 //game variables
-let secondsLeft = 10;
+let secondsLeft;
 let questions = Object.keys(lib);
 
 //game elements
@@ -55,12 +55,15 @@ let buttonsEl = choicesEl.childNodes;
 
 function addScore() {
     let initials = document.querySelector('input').value;
-    let scoresObj = JSON.parse(window.localStorage.getItem("scores"));    
+    let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
+    let userScore = JSON.parse(window.localStorage.getItem("currentScore"));
+    window.localStorage.removeItem("currentScore");
+
     if (!scoresObj){
         scoresObj = {};
     }
-    scoresObj[initials] = secondsLeft;
-    console.log("Initials: ", initials);
+    scoresObj[initials] = userScore;
+    console.log("Initials: ", initials, userScore);
     window.localStorage.setItem("scores", JSON.stringify(scoresObj));
 };
 
@@ -103,7 +106,7 @@ function askQuestion() {
         let btnEl = document.createElement("button");
         btnEl.setAttribute("class", "choice");
         btnEl.setAttribute("id", i);
-        btnEl.textContent = choices[i];
+        btnEl.textContent = `${i+1}. ${choices[i]}`;
         choicesEl.appendChild(btnEl);
     };
 }
@@ -113,6 +116,7 @@ function evaluateResponse(data) {
         return 5;
     }
     return -1;
+    //Add function call to notifiy user answer was incorrect or correct
 }
 
 //interval for checking if gameplay is valid.
@@ -123,8 +127,8 @@ function setTimer() {
       secondsLeft--;
       timerEl.textContent = `Time left ${secondsLeft}`;
       if(!secondsLeft || !questions.length) {
-        endGame(secondsLeft);
         clearInterval(timerInterval);
+        endGame();
       }
   
     }, 1000);
@@ -132,22 +136,22 @@ function setTimer() {
 
   //Main function for game play
   function playGame() {
-      secondsLeft = 5;
+      secondsLeft = 20;
       playBtn.setAttribute("disabled", true);
       setTimer();
       askQuestion()
   }
 
-  function endGame(score) {
+  function endGame() {
     playBtn.setAttribute("disabled", false);
-    userScore = score;
-    window.location.href = './high-scores.html';
+    window.localStorage.setItem("currentScore", JSON.stringify(secondsLeft));
+    // window.location.href = './high-scores.html';
   }
 
 choicesEl.addEventListener("click", function(event) {
     event.preventDefault();
     if(event.target.matches("button")) {
-        console.log(event.target.innerText)
+        // console.log(event.target.innerText)
         secondsLeft += evaluateResponse(event.target.innerText);
         if (questions.length) {
             askQuestion();
