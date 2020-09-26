@@ -2,3 +2,11 @@ section{
     text-align: center;
     font-size: xx-large;
 }
+
+section.jumbotron{
+    text-align: center;
+}
+
+input{
+    margin-bottom: 20px;
+}

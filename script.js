@@ -39,15 +39,38 @@ let lib = {
 }
 
 //game variables
-let secondsLeft;
+let secondsLeft = 10;
 let questions = Object.keys(lib);
 
-//elements
+//game elements
 let timerEl = document.querySelector(".timer");
 let playBtn = document.getElementById("playBtn");
 let questionEl = document.querySelector(".question");
 let choicesEl = document.querySelector('.choices');
 let buttonsEl = choicesEl.childNodes;
+
+//highscore elements
+// let scoreEl = document.querySelector(".myScore");
+// scoreEl.textContent = `Your final score is ${secondsLeft}`
+
+function addScore() {
+    let initials = document.querySelector('input').value;
+    let scoresObj = JSON.parse(window.localStorage.getItem("scores"));    
+    if (!scoresObj){
+        scoresObj = {};
+    }
+    scoresObj[initials] = secondsLeft;
+    console.log("Initials: ", initials);
+    window.localStorage.setItem("scores", JSON.stringify(scoresObj));
+};
+
+
+function clearScores(){
+    let scores = JSON.parse(window.localStorage.getItem("scores"))
+    if (scores) {
+        window.localStorage.removeItem("scores");
+    }
+}
 
 //funtion to shuffle array choices
 function shuffleArr(arr) {
@@ -69,6 +92,7 @@ function askQuestion() {
     let thisQ = questions.pop()
     questionEl.textContent = thisQ;
     let choices = Object.keys(lib[thisQ]);
+    shuffleArr(choices);
     
     //Delete all buttons existing
     while (choicesEl.firstChild) {
@@ -117,7 +141,7 @@ function setTimer() {
   function endGame(score) {
     playBtn.setAttribute("disabled", false);
     userScore = score;
-    // window.location.href = './high-scores.html';
+    window.location.href = './high-scores.html';
   }
 
 choicesEl.addEventListener("click", function(event) {
