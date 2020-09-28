@@ -86,11 +86,31 @@ function askQuestion() {
 }
 
 function evaluateResponse(data) {
+    data = data.split(". ")[1]; //remove numbers
+    let answerScore = -1;
     if (lib[questionEl.textContent][data]) {
-        return 5;
-    }
-    return -1;
-    //Add function call to notifiy user answer was incorrect or correct
+        answerScore = 5;
+    };
+    userFeedback(answerScore);
+    return answerScore;
+}
+
+function userFeedback(val) {
+    let msg = "Your response is wrong... :("
+    let time = 0.5;
+    if (parseInt(val) > 0) {
+        msg = "CORRECT!"
+    };
+    let feedback = $(`<p>${msg}</p>`).attr("id", "feedback")
+    $("section").append(feedback);
+    let timerInterval = setInterval(function() {
+        time -= 0.1;
+        if(time < 0) {
+          clearInterval(timerInterval);
+          $("section").children("#feedback").remove()
+        }
+    
+      }, 100);
 }
 
 //interval for checking if gameplay is valid.
@@ -110,7 +130,7 @@ function setTimer() {
 
   //Main function for game play
   function playGame() {
-      secondsLeft = 20;
+      secondsLeft = 80;
       playBtn.setAttribute("disabled", true);
       setTimer();
       askQuestion()

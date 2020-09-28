@@ -24,7 +24,7 @@ function getState() {
     }
 }
 
-    let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
+    // let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
 
 function displayScores() {
     refreshScoresList();

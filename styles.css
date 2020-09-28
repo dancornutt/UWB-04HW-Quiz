@@ -33,3 +33,8 @@ ol li {
     text-align: center;
     width:  400px;
 }
+
+#feedback {
+    color: grey;
+    font-size: medium;
+}
