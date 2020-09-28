@@ -27,3 +27,9 @@ section.jumbotron{
 input{
     margin-bottom: 20px;
 }
+
+ol li {
+    margin: auto;
+    text-align: center;
+    width:  400px;
+}

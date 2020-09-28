@@ -69,7 +69,7 @@ function askQuestion() {
     let thisQ = questions.pop()
     questionEl.textContent = thisQ;
     let choices = Object.keys(lib[thisQ]);
-    shuffleArr(choices);
+    choices = shuffleArr(choices);
     
     //Delete all buttons existing
     while (choicesEl.firstChild) {
@@ -118,6 +118,10 @@ function setTimer() {
 
   function endGame() {
     playBtn.setAttribute("disabled", false);
+    // if (!secondsLeft) {
+    //     console.log("score isn't truthy!")
+    //     secondsLeft = 0;
+    // }
     window.localStorage.setItem("currentScore", JSON.stringify(secondsLeft));
     window.location.href = './high-scores.html';
   }
