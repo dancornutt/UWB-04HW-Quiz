@@ -49,32 +49,6 @@ let questionEl = document.querySelector(".question");
 let choicesEl = document.querySelector('.choices');
 let buttonsEl = choicesEl.childNodes;
 
-//highscore elements
-// let scoreEl = document.querySelector(".myScore");
-// scoreEl.textContent = `Your final score is ${secondsLeft}`
-
-function addScore() {
-    let initials = document.querySelector('input').value;
-    let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
-    let userScore = JSON.parse(window.localStorage.getItem("currentScore"));
-    window.localStorage.removeItem("currentScore");
-
-    if (!scoresObj){
-        scoresObj = {};
-    }
-    scoresObj[initials] = userScore;
-    console.log("Initials: ", initials, userScore);
-    window.localStorage.setItem("scores", JSON.stringify(scoresObj));
-};
-
-
-function clearScores(){
-    let scores = JSON.parse(window.localStorage.getItem("scores"))
-    if (scores) {
-        window.localStorage.removeItem("scores");
-    }
-}
-
 //funtion to shuffle array choices
 function shuffleArr(arr) {
     let currentIndex = arr.length, temporaryValue, randomIndex;
@@ -145,13 +119,12 @@ function setTimer() {
   function endGame() {
     playBtn.setAttribute("disabled", false);
     window.localStorage.setItem("currentScore", JSON.stringify(secondsLeft));
-    // window.location.href = './high-scores.html';
+    window.location.href = './high-scores.html';
   }
 
 choicesEl.addEventListener("click", function(event) {
     event.preventDefault();
     if(event.target.matches("button")) {
-        // console.log(event.target.innerText)
         secondsLeft += evaluateResponse(event.target.innerText);
         if (questions.length) {
             askQuestion();
