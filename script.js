@@ -124,7 +124,6 @@ function setTimer() {
         clearInterval(timerInterval);
         endGame();
       }
-  
     }, 1000);
   }
 
@@ -138,10 +137,6 @@ function setTimer() {
 
   function endGame() {
     playBtn.setAttribute("disabled", false);
-    // if (!secondsLeft) {
-    //     console.log("score isn't truthy!")
-    //     secondsLeft = 0;
-    // }
     window.localStorage.setItem("currentScore", JSON.stringify(secondsLeft));
     window.location.href = './high-scores.html';
   }

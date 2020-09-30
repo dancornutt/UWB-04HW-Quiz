@@ -23,7 +23,6 @@ function getState() {
         displayScores();
     }
 }
-    // let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
 
 function displayScores() {
     refreshScoresList();
