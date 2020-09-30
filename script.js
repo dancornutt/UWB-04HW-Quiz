@@ -130,7 +130,7 @@ function setTimer() {
 
   //Main function for game play
   function playGame() {
-      secondsLeft = 80;
+      secondsLeft = 60;
       playBtn.setAttribute("disabled", true);
       setTimer();
       askQuestion()

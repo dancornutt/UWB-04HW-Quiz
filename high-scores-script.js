@@ -23,7 +23,6 @@ function getState() {
         displayScores();
     }
 }
-
     // let scoresObj = JSON.parse(window.localStorage.getItem("scores"));
 
 function displayScores() {
@@ -34,8 +33,7 @@ function displayScores() {
         scoresArr.forEach(element => {
             $(".allScoresList").append(`<li>Score:${element} by ${scores[element]}</li>`);
         }); 
-    }
-    
+    }  
 }
 
 function refreshScoresList() {
